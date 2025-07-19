@@ -1,4 +1,5 @@
 # Code: 
+```
 import React, {  useEffect, useState } from "react";
 
 function useMousePointer() {
@@ -31,4 +32,4 @@ function App()
 }
 
 export default App;
-
+```
