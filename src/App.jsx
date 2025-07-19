@@ -1,40 +1,32 @@
-import React from "react";
-import useSWR from "swr";
+import React, {  useEffect, useState } from "react";
 
-const fetcher = async (url) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch");
-  }
-  return response.json();
-};
-
-function App() {
-  const { data, error, isLoading } = useSWR(`https://dummyjson.com/todos`, fetcher);
-
-  if (error) {
-    return <div>Failed to Load</div>;
+function useMousePointer() {
+ 
+  const [position, setPosition] = useState({x : 0, y: 0});
+  
+  const handleMouseMove = (e) => {
+    setPosition({x:e.clientX, y:e.clientY});
   }
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
 
-  return (
-    <div>
-      {data.todos.map((todo) => (
-        <Track key={todo.id} todo={todo} />
-      ))}
-    </div>
-  );
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    }
+  },[]);
+  
+  return position;
 }
 
-function Track({ todo }) {
-  return (
-    <div>
-      <div>{todo.todo}</div>
-    </div>
-  );
+function App()
+{
+  const mousePointer = useMousePointer(0);
+
+
+  return <div>
+    Your Mouse Position is {mousePointer.x} {mousePointer.y}
+  </div>
 }
 
 export default App;
